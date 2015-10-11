@@ -7,13 +7,27 @@ import producers.Message
 import akka.pattern.ask
 import scala.concurrent.duration._
 import scala.concurrent.Await
+import play.api.data._
+import play.api.data.Forms._
 
 class MessageProducerController extends Controller {
 
-	def post = Action {
-		implicit val timeout = Timeout(1 minutes)
+	implicit val timeout = Timeout(1 minutes)
+	val postForm = Form(
+		mapping(
+			"exchange" -> text,
+			"routing_key" -> text,
+			"data" -> text
+		)(Message.apply)(Message.unapply)
+	)
+
+	def post = Action { implicit request =>
+		val message = postForm.bindFromRequest().get
 		val future = GlobalConfig.messageProducerRouter ? Message("test", "test", "message-delivery-api")
 		val didPublish: Boolean = Await.result(future.mapTo[Boolean], 1 minute)
-		Ok(didPublish.toString)
+		if (didPublish)
+			Ok
+		else
+			ServiceUnavailable
 	}
 }
