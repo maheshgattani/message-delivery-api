@@ -20,8 +20,7 @@ resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 routesGenerator := InjectedRoutesGenerator
 
 resolvers ++= Seq(
-  "The New Motion Public Repo" at "http://nexus.thenewmotion.com/content/groups/public/",
-  "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
+  "The New Motion Public Repo" at "http://nexus.thenewmotion.com/content/groups/public/"
 )
 
 libraryDependencies ++= Seq(
