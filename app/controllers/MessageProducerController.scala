@@ -23,7 +23,7 @@ class MessageProducerController extends Controller {
 
 	def post = Action { implicit request =>
 		val message = postForm.bindFromRequest().get
-		val future = GlobalConfig.messageProducerRouter ? Message("test", "test", "message-delivery-api")
+		val future = GlobalConfig.messageProducerRouter ? message
 		val didPublish: Boolean = Await.result(future.mapTo[Boolean], 1 minute)
 		if (didPublish)
 			Ok
