@@ -5,7 +5,7 @@ import com.rabbitmq.client.{ShutdownSignalException, ConfirmListener}
 import com.thenewmotion.akka.rabbitmq._
 import play.Play
 
-case class Message(message: String, routingKey: String, exchange: String)
+case class Message(data: String, routingKey: String, exchange: String)
 case class NackException(message: String) extends Exception
 
 class MessageProducer extends Actor {
@@ -27,9 +27,9 @@ class MessageProducer extends Actor {
 		channel
 	}
 
-	def post(postStr: String, routingKey: String, exchange: String) : Boolean = {
+	def post(message: Message) : Boolean = {
 		try {
-			channel.basicPublish(exchange, routingKey, null, postStr.getBytes("UTF-8"))
+			channel.basicPublish(message.exchange, message.routingKey, null, message.data.getBytes("UTF-8"))
 			channel.waitForConfirmsOrDie(10)
 			true
 		} catch {
@@ -49,7 +49,7 @@ class MessageProducer extends Actor {
 
 	def receive = {
 		case Message(message, routingKey, exchange) => {
-			sender ! post(message, routingKey, exchange)
+			sender ! post(Message(message, routingKey, exchange))
 		}
 	}
 }

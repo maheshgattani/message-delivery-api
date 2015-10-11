@@ -15,9 +15,9 @@ class MessageProducerController extends Controller {
 	implicit val timeout = Timeout(1 minutes)
 	val postForm = Form(
 		mapping(
-			"exchange" -> text,
+			"data" -> text,
 			"routing_key" -> text,
-			"data" -> text
+			"exchange" -> text
 		)(Message.apply)(Message.unapply)
 	)
 
