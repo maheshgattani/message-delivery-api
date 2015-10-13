@@ -11,3 +11,5 @@ For applications wanting to fire-and-forget a message to the exchange, fire-and-
 This application uses akka-rabbitmq library to communicate with RabbitMQ.
 
 Every exchange being posted to should already exist. This is done with the intent to keep the performance optimanl by not checking the existance of the exchange.
+
+Better documentation to follow.
